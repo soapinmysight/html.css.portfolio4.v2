@@ -20,7 +20,10 @@ function getJSONdata(apiUrl, successHandler)
  function displayCards(data){
     for (let i = 1; i < data.length+1; i++){
         let cards = document.getElementById(`${i}`)
+
+        //console logs for debugging purposes
         console.log(`${i}`)
+        console.log(data[i].title)
 
         let title = document.createElement("h3")
         title.innerHTML = data[i].title
