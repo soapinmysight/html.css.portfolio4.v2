@@ -70,7 +70,34 @@ function portfolioClickHandler(e)
 //This is a check to ensure that the click event was specifically triggered by a button element.
     if (clickedItem.nodeName !== 'BUTTON') {
         return;
-    }}
+    }
+    displayDetail()
+}
+
+function displayDetail(e){
+    // //Get the information from the global stored data
+    // let pokemon = pokemonData[clickedItem.dataset.id];
+    //
+    // //Reset the content
+    // detailContent.innerHTML = '';
+    //
+    // //Show the name we used on the main grid
+    // let title = document.createElement('h1');
+    // title.innerHTML = `${pokemon.name} (#${pokemon.id})`;
+    // detailContent.appendChild(title);
+    //
+    // //Display the shiny
+    // let shiny = document.createElement('img');
+    // shiny.src = pokemon.sprites.other.home.front_shiny;
+    // detailContent.appendChild(shiny);
+    //
+    // //Open the modal
+    // detailDialog.showModal();
+    // gallery.classList.add('dialog-open');
+}
+
+
+
 
  function ajaxErrorHandler(e){
     console.log(e)
