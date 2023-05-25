@@ -1,7 +1,13 @@
 window.addEventListener('load',init)
 
+//Global variables
+let portfolio;
+
 // Function to initialize the code
 function init() {
+    // Retrieve the portfolio element and add a click event listener
+    portfolio = document.getElementById('projects');
+    portfolio.addEventListener('click', portfolioClickHandler);
     // Call the 'getJSONdata' function with the specified API URL
     getJSONdata(`webservice/index.php`, displayCards)
 }
@@ -52,6 +58,19 @@ function getJSONdata(apiUrl, successHandler)
         cards.appendChild(button);
     }
  }
+
+//This function will handle click events
+function portfolioClickHandler(e)
+{
+//This line assigns the target of the event (e.target) to the variable clickedItem. The target represents the element that triggered the event, in this case, the element that was clicked
+    let clickedItem = e.target;
+//This line checks if the nodeName property of the clickedItem is not equal to the string 'BUTTON'.
+//The nodeName property represents the name of the node (HTML element) in uppercase.
+//If the clicked element is not a button, the code immediately returns, exiting the function.
+//This is a check to ensure that the click event was specifically triggered by a button element.
+    if (clickedItem.nodeName !== 'BUTTON') {
+        return;
+    }}
 
  function ajaxErrorHandler(e){
     console.log(e)
