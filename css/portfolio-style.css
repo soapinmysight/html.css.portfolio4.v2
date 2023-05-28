@@ -105,6 +105,13 @@ h1   {
     transition: transform 300ms;
 }
 
+  button {
+    border: 0;
+    box-shadow: 0 0 20px white;
+    transition: 0.4s;
+    justify-content: center;
+  }
+
 /*voor animatie*/
   .card:hover {
     transform: translateY(-10px);
