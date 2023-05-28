@@ -1,10 +1,11 @@
+// Adding event listener to execute the 'init' function when the window loads
 window.addEventListener('load', init)
 
 //Global variables
 let portfolio;
 let card;
-let detailDialog;
-let detailContent;
+let descriptionDialog;
+let descriptionCard;
 let favItems = [];
 
 // Function to initialize the code
@@ -16,12 +17,14 @@ function init() {
     // Call the 'getJSONdata' function with the specified API URL
     getJSONdata(`webservice/index.php`, displayCards)
 
-    detailDialog = document.getElementById('description');
-    detailContent = detailDialog.querySelector('.modal-content');
-    detailDialog.addEventListener('click', detailModalClickHandler);
-    detailDialog.addEventListener('close', dialogCloseHandler);
+    // Getting the description dialog element and adding click and close event listeners to it
+    descriptionDialog = document.getElementById('description');
+    descriptionCard = descriptionDialog.querySelector('.modal-content');
+    descriptionDialog.addEventListener('click', descriptionModalClickHandler);
+    descriptionDialog.addEventListener('close', dialogCloseHandler);
 }
 
+// Function to fetch JSON data from an API
 function getJSONdata(apiUrl, successHandler) {
     // Fetch data from the API URL
     fetch(apiUrl)
@@ -46,6 +49,7 @@ function displayCards(data) {
         //(aka the number from the for loop)
         let cards = document.getElementById(`${i}`)
 
+        //title:
         // Create an 'h3' element for the title
         let title = document.createElement("h3")
         // Set the inner HTML of the title element (which we just created)
@@ -54,16 +58,17 @@ function displayCards(data) {
         // Append the title element to the 'cards' element
         cards.appendChild(title)
 
-        //next piece of code creates a detail button for each part so we can show the description of each part
+        //description button:
+        //for each card, so we can show the description of each card
         //create a new HTML button element and assigns it to the variable button
         let button = document.createElement('button');
         // Set the inner HTML of the button element (which we just created)
-        button.innerHTML = 'Show Details';
+        button.innerHTML = 'Show Description';
         //geef id mee bij het klikken op de button
         button.dataset.id = data[i].id;
         cards.appendChild(button);
 
-        //next piece of code creates a detail button for each part so we can Add Favorite
+        //favourite button:
         //create a new HTML button element and assigns it to the variable button
         let buttonFav = document.createElement('button');
         // Set the inner HTML of the button element (which we just created)
@@ -73,10 +78,18 @@ function displayCards(data) {
         buttonFav.id = `fav-button${i}`;
         cards.appendChild(buttonFav);
     }
+    // Checking if there are any favorite items stored in local storage
+    // and adding them to the favItems array
+    // Retrieve the favorite items stored in local storage
     let favoriteItemString = localStorage.getItem('favItems')
+    // Check if favoriteItemString is not null (if favorite items are stored)
+    //deze statement is nodig zodat de website geen error geeft als we hem voor het eerst bezoeken
     if (favoriteItemString !== null){
+        // Parse the favoriteItemString JSON string into a JavaScript object
         favItems = JSON.parse(favoriteItemString)
+        // Iterate over each favorite item in the favItems array
         for (let favoriteItem of favItems){
+            // Call the addFavorite() function with the current favorite items
             addFavorite(favoriteItem)
         }
     }
@@ -96,15 +109,17 @@ function portfolioClickHandler(e) {
     }
     //assigning id to the variable card
     card = clickedItem.dataset.id;
-    //
-    if (clickedItem.innerHTML === 'Show Details') {
-    getJSONdata(`webservice/index.php?id=${card}`, displayDetail)
+    //if statement so we call the right action for the right button
+    if (clickedItem.innerHTML === 'Show Description') {
+        // Fetching description data for a specific card and calling the 'displayDetail' function as a success handler
+        getJSONdata(`webservice/index.php?id=${card}`, displayDescription)
     }
-    //
+    //if statement so we call the right action for the right button
     else if  (clickedItem.innerHTML === 'Add Favorite'){
         addFavorite(card)
         addItemLocalStorage(card)
     }
+    //if statement so we call the right action for the right button
     else if (clickedItem.innerHTML === 'Remove Favorite'){
         removeFavorite(card)
         removeItemLocalStorage(card)
@@ -113,9 +128,10 @@ function portfolioClickHandler(e) {
 
 }
 
-function displayDetail(data) {
+// Function to display the description of a card
+function displayDescription(data) {
     console.log(data)
-    detailContent.innerHTML = '';
+    descriptionCard.innerHTML = '';
         // Get the element with the ID corresponding to the current index
         //(aka the number from the for loop)
         let cards = document.getElementById(`${card}`)
@@ -126,72 +142,68 @@ function displayDetail(data) {
         // to the title value from the data
         title.innerHTML = data.title;
         // Append the title element to the 'cards' element
-    detailContent.appendChild(title)
+        descriptionCard.appendChild(title)
 
-        //show the detail description
+        //show the description
         let description = document.createElement('p')
         description.innerHTML = data.description;
-    detailContent.appendChild(description);
+        descriptionCard.appendChild(description);
 
         //create close button
         let button = document.createElement('button');
         // Set the inner HTML of the button element (which we just created)
         button.innerHTML = 'close';
-    detailContent.appendChild(button);
+        descriptionCard.appendChild(button);
 
-        // Open the modal (detail dialog)
-        detailDialog.showModal();
-
-        // Add the 'dialog-open' class to the gallery element to apply a blur effect
-        portfolio.classList.add('dialog-open');
+        // Open the modal (Description dialog)
+        descriptionDialog.showModal();
     }
 
-/**
- * Close the modal if clicked on the close button or outside the modal (on the backdrop)
- *
- * @param e
- */
-function detailModalClickHandler(e)
+// Event handler to close description modal click events when clicked on button or backdrop
+function descriptionModalClickHandler(e)
 {
     if (e.target.nodeName === 'DIALOG' || e.target.nodeName === 'BUTTON') {
-        detailDialog.close();
+        descriptionDialog.close();
     }
 }
 
-/**
- * Close the underlying blur effect when dialog is closed (both on our own click or the native ESC key)
- *
- * @param e
- */
-//TODO remove this or use this
-function dialogCloseHandler(e)
-{
-    portfolio.classList.remove('dialog-open');
-}
-
-//function for changing colors
+// Function to mark a card as favorite by changing the text on the button
 function addFavorite(card){
+    // Get the button element associated with the card
     let buttonFav = document.getElementById(`fav-button${card}`)
+    // Change the button text to 'Remove Favorite'
     buttonFav.innerHTML = 'Remove Favorite'
 }
+
+// Function to add an item to local storage
 function addItemLocalStorage(card){
     console.log(card)
+    // Add (push) the card to the favItems array
     favItems.push(card)
+    // Convert the favItems array to a JSON string and store it in local storage
     localStorage.setItem("favItems", JSON.stringify(favItems))
     console.log(localStorage.getItem("favItems"))
 }
 
+// Function to remove a card from favorites
 function removeFavorite(card){
+    // Get the button element associated with the card
     let buttonFav = document.getElementById(`fav-button${card}`)
+    // Change the button text (back) to 'Add Favorite'
     buttonFav.innerHTML = 'Add Favorite'
 }
+
+// Function to remove an item from local storage
 function removeItemLocalStorage(card){
+    // Find the index of the card in the favItems array
     let itemPosition = favItems.indexOf(card)
+    // Remove the card from the favItems array
     favItems.splice(itemPosition, 1)
+    // Convert the updated favItems array to a JSON string and store it in local storage
     localStorage.setItem("favItems", JSON.stringify(favItems))
 }
 
-
-    function ajaxErrorHandler(e) {
-        console.log(e)
-    }
+// Function to handle AJAX errors
+function ajaxErrorHandler(e) {
+    console.log(e)
+}
