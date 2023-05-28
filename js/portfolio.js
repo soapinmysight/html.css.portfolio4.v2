@@ -1,3 +1,5 @@
+//commented numbers (1-9) are for school presentation
+
 // Adding event listener to execute the 'init' function when the window loads
 window.addEventListener('load', init)
 
@@ -14,6 +16,7 @@ function init() {
     portfolio = document.getElementById('projects');
     portfolio.addEventListener('click', portfolioClickHandler);
 
+    //11
     // Call the 'getJSONdata' function with the specified API URL
     getJSONdata(`webservice/index.php`, displayCards)
 
@@ -24,9 +27,11 @@ function init() {
     descriptionDialog.addEventListener('close', dialogCloseHandler);
 }
 
+//11
 // Function to fetch JSON data from an API
 function getJSONdata(apiUrl, successHandler) {
     // Fetch data from the API URL
+    //
     fetch(apiUrl)
         .then((response) => {
             // Check if the response is not okay (aka not successful)
@@ -41,6 +46,7 @@ function getJSONdata(apiUrl, successHandler) {
         .catch(ajaxErrorHandler);
 }
 
+//11
 // Function to display the cards using the retrieved data
 function displayCards(data) {
     //for loop to we loop through the numbers we need to load the data in
@@ -78,6 +84,7 @@ function displayCards(data) {
         buttonFav.id = `fav-button${i}`;
         cards.appendChild(buttonFav);
     }
+    //55
     // Checking if there are any favorite items stored in local storage
     // and adding them to the favItems array
     // Retrieve the favorite items stored in local storage
@@ -95,16 +102,16 @@ function displayCards(data) {
     }
 }
 
+//33
 //This function will handle click events
 function portfolioClickHandler(e) {
 //This line assigns the target of the event (e.target) to the variable clickedItem.
 // The target represents the element that triggered the event, in this case, the element that was clicked
     let clickedItem = e.target;
 //This line checks if the nodeName property of the clickedItem is not equal to the string 'BUTTON'.
-//The nodeName property represents the name of the node (HTML element) in uppercase.
-//If the clicked element is not a button, the code immediately returns, exiting the function.
-//This is a check to ensure that the click event was specifically triggered by a button element.
     if (clickedItem.nodeName !== 'BUTTON') {
+        //If the clicked element is not a button, the code immediately returns (exits the function)
+        //this check is to see if what we clicked on was a button (and not something else)
         return;
     }
     //assigning id to the variable card
@@ -136,6 +143,7 @@ function displayDescription(data) {
         //(aka the number from the for loop)
         let cards = document.getElementById(`${card}`)
 
+        //88
         // Create an 'h3' element for the title
         let title = document.createElement("h3")
         // Set the inner HTML of the title element (which we just created)
@@ -144,15 +152,22 @@ function displayDescription(data) {
         // Append the title element to the 'cards' element
         descriptionCard.appendChild(title)
 
+        //88
         //show the description
+        // Create an 'p' element for the description
         let description = document.createElement('p')
+        // Set the inner HTML of the title element (which we just created)
+        // to the description value from the data
         description.innerHTML = data.description;
+        // Append the description element to the 'descriptionCard' element
         descriptionCard.appendChild(description);
 
+        //44
         //create close button
         let button = document.createElement('button');
         // Set the inner HTML of the button element (which we just created)
         button.innerHTML = 'close';
+        // Append the button element to the 'descriptionCard' element
         descriptionCard.appendChild(button);
 
         // Open the modal (Description dialog)
@@ -166,7 +181,7 @@ function descriptionModalClickHandler(e)
         descriptionDialog.close();
     }
 }
-
+//55
 // Function to mark a card as favorite by changing the text on the button
 function addFavorite(card){
     // Get the button element associated with the card
@@ -174,7 +189,7 @@ function addFavorite(card){
     // Change the button text to 'Remove Favorite'
     buttonFav.innerHTML = 'Remove Favorite'
 }
-
+//55
 // Function to add an item to local storage
 function addItemLocalStorage(card){
     console.log(card)
@@ -192,7 +207,7 @@ function removeFavorite(card){
     // Change the button text (back) to 'Add Favorite'
     buttonFav.innerHTML = 'Add Favorite'
 }
-
+//66
 // Function to remove an item from local storage
 function removeItemLocalStorage(card){
     // Find the index of the card in the favItems array
