@@ -31,7 +31,6 @@ function init() {
 // Function to fetch JSON data from an API
 function getJSONdata(apiUrl, successHandler) {
     // Fetch data from the API URL
-    //
     fetch(apiUrl)
         .then((response) => {
             // Check if the response is not okay (aka not successful)
@@ -200,6 +199,7 @@ function addItemLocalStorage(card){
     console.log(localStorage.getItem("favItems"))
 }
 
+//66
 // Function to remove a card from favorites
 function removeFavorite(card){
     // Get the button element associated with the card
